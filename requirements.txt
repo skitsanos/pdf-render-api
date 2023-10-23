@@ -1,0 +1,5 @@
+jsonschema
+flask
+PyYAML
+waitress
+weasyprint
