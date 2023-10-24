@@ -1,6 +1,5 @@
 import base64
 from json import JSONDecodeError
-import io
 
 from weasyprint import HTML
 
@@ -53,14 +52,16 @@ def handler():
             g.app.logger.info(f'Processing HTML content')
             html = HTML(string=json_data["content"])
 
-        buffer = io.BytesIO()
-        html.write_pdf(target=buffer)
-        buffer.seek(0)
-        pdf_data = buffer.getvalue()
+        # buffer = io.BytesIO()
+        # html.write_pdf(target=buffer)
+        # buffer.seek(0)
+        # pdf_data = buffer.getvalue()
+
+        pdf_data = html.write_pdf()
 
         base64_encoded_pdf = base64.b64encode(pdf_data).decode('utf-8')
 
-        if 'raw' not in json_data or json_data['raw'] == False:
+        if 'raw' not in json_data or not json_data['raw']:
             return make_response({
                 "result": base64_encoded_pdf
             }, 200)
