@@ -1,4 +1,5 @@
 import base64
+import time
 from json import JSONDecodeError
 
 from weasyprint import HTML
@@ -23,6 +24,8 @@ schema = {
 
 
 def handler():
+    start_time = time.perf_counter()
+
     global html
 
     if request.content_length is None:
@@ -61,13 +64,18 @@ def handler():
 
         base64_encoded_pdf = base64.b64encode(pdf_data).decode('utf-8')
 
+        diff = time.perf_counter() - start_time
+
         if 'raw' not in json_data or not json_data['raw']:
-            return make_response({
+            r = make_response({
                 "result": base64_encoded_pdf
             }, 200)
+            r.headers['X-Exec-Time'] = str(diff)
+            return r
 
         response = Response(pdf_data, content_type='application/pdf')
         response.headers['Content-Disposition'] = 'inline; filename=untitled.pdf'
+        response.headers['X-Exec-Time'] = str(diff)
         return response
 
     except ValidationError as e:
