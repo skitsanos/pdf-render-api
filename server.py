@@ -10,8 +10,7 @@ app = Flask(__name__)
 
 
 def load_routes(app, path):
-    for root, dirs, files in os.walk(path):
-        app.logger.info(root)
+    for root, dirs, files in os.walk(path, followlinks=False):
         for found_dir in dirs:
             route_path = os.path.relpath(os.path.join(root, found_dir), path)
             module_path = os.path.relpath(os.path.join(root, found_dir), path)

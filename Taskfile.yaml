@@ -1,0 +1,19 @@
+version: '3'
+
+tasks:
+  install-packages:
+    cmds:
+      - cmd: pip install --upgrade pip
+      - cmd: pip install virtualenv
+      - cmd: test -d venv || virtualenv venv
+      - cmd: venv/bin/pip install --upgrade -r requirements.txt
+        platforms: [ darwin, linux ]
+      - cmd: venv\Scripts\pip install --upgrade -r requirements.txt
+        platforms: [ windows ]
+
+  start:
+    cmds:
+      - cmd: venv/bin/python server.py
+        platforms: [ darwin, linux ]
+      - cmd: venv\Scripts\python server.py
+        platforms: [ windows ]
