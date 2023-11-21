@@ -17,3 +17,8 @@ tasks:
         platforms: [ darwin, linux ]
       - cmd: venv\Scripts\python server.py
         platforms: [ windows ]
+
+  docker-build:
+    cmds:
+      - |
+        docker build --progress plain -t skitsanos/pdf-render-api .
